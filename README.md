@@ -14,6 +14,7 @@ make all
 ```console
 > ls -1 *.stl
 bottomMiddle.stl
+connector.stl
 customDrawer.stl
 ```
 
