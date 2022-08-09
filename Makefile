@@ -1,4 +1,4 @@
-PARTS=	bottomMiddle.stl customDrawer.stl connector.stl
+PARTS=	middleMiddle.stl customDrawer.stl connector.stl
 OPENSCAD_FLAGS=	--export-format binstl \
 				-D drawRaws=4 \
 				-D drawCols=1 \
