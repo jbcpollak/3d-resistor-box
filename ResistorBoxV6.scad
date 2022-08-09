@@ -488,7 +488,7 @@ module CustomDrawer()
             translate([startX + x*stepX, startY + y*stepY, drawBottomHeight])
                 SmoothCube([ccompWidth, ccompDepth, compartHeightF+1]);
         //top indent for dividers
-        translate([0,0,drawHeight-stopperHeight]) 
+        translate([0,0,drawHeight])
             SmoothCube([indentWidth, indentDepth, smoothRadius+1]);
     }
         
@@ -608,6 +608,7 @@ module HandleThin()
 
 module LabelFrame()
 {
+/*
     depth = labelFrameThickness + labelFrameSpace;
     
     difference()
@@ -632,6 +633,7 @@ module LabelFrame()
     
     rotate([90,0,-90]) linear_extrude(height =labelFrameWidth, center=true) 
         polygon(points=[[0,0],[depth,0], [0,-depth*ratio*1.5]]);
+*/
 }
 
 
