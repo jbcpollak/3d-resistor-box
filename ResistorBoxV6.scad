@@ -57,13 +57,13 @@ drawVertSpace = 0.35;
 //the amount of extra space (mm) on the behind the drawer (reprint box after changing, unless using 'custom sized box', then reprint drawer)
 drawBackSpace = 0.2;
 //the amount  (mm) to shrink the drawer in height and width to fit more easily (reprint drawer after changing). TOLERANT drawers use 0.2mm.
-drawShrink = 0.0;
+drawShrink = 0.2;
 
 
 /* [Your Printer Settings] */
 //the layer width that you print with (0.48 is normal for 0.4 nozzle)
 layerWidth=0.48;
-//the layer height that you print with 
+//the layer height that you print with
 layerHeight=0.2;
 
 
@@ -185,36 +185,36 @@ print_part();
 
 module print_part()
 {
-	if (part == "single") 
+	if (part == "single")
         rotate([-90,0,0]) Box();
-    if (part == "drawer") 
+    if (part == "drawer")
         Drawer();
     if (part == "customDrawer")
         CustomDrawer();
-    if (part == "topLeft") 
+    if (part == "topLeft")
         rotate([-90,0,0]) Box(boxRight="connector", boxBottom="connector");
-    if (part == "topMiddle") 
-        rotate([-90,0,0]) 
+    if (part == "topMiddle")
+        rotate([-90,0,0])
             Box(boxLeft="connector", boxRight="connector", boxBottom="connector");
-    if (part == "topRight") 
+    if (part == "topRight")
         rotate([-90,0,0]) Box(boxLeft="connector", boxBottom="connector");
-    if (part == "middleLeft") 
-        rotate([-90,0,0]) 
+    if (part == "middleLeft")
+        rotate([-90,0,0])
             Box(boxRight="connector", boxBottom="connector", boxTop="connector");
-    if (part == "middleMiddle") 
-        rotate([-90,0,0]) 
-            Box(boxLeft="connector", boxRight="connector", 
+    if (part == "middleMiddle")
+        rotate([-90,0,0])
+            Box(boxLeft="connector", boxRight="connector",
                 boxBottom="connector", boxTop="connector");
-    if (part == "middleRight") 
-        rotate([-90,0,0]) 
+    if (part == "middleRight")
+        rotate([-90,0,0])
             Box(boxLeft="connector", boxBottom="connector", boxTop="connector");
-    if (part == "bottomLeft") 
+    if (part == "bottomLeft")
         rotate([-90,0,0]) Box(boxRight="connector", boxTop="connector");
-    if (part == "bottomMiddle") 
-        rotate([-90,0,0]) 
+    if (part == "bottomMiddle")
+        rotate([-90,0,0])
             Box(boxLeft="connector", boxRight="connector", boxTop="connector");
-    if (part == "bottomRight") 
-        rotate([-90,0,0]) 
+    if (part == "bottomRight")
+        rotate([-90,0,0])
             Box(boxLeft="connector", boxTop="connector");
     if (part == "topSC")
         rotate([-90,0,0]) Box(boxBottom="connector");
@@ -232,12 +232,12 @@ module print_part()
         rotate([-90,0,0]) Connector();
     if (part == "info")
         Info();
-}      
+}
 
 
 module Info()
 {
-    
+
     linear_extrude(height=0.2) union()
     {
         text(str("Box Size (mm): ",boxWidth, ", ",boxDepth,", ", boxHeight));
@@ -247,7 +247,7 @@ module Info()
             text(str("Label Size (mm): ", labelFrameWidth-labelFrameThickness*2-1,", ", labelFrameHeight-labelFrameThickness-1));
         translate([0,-60,0])
             text(str("Compartment Size (mm): ", compartWidthF,", ", compartDepthF,", ",compartHeightF));
-        
+
     }
 }
 
@@ -265,7 +265,7 @@ module Connector()
             [connectorWidth/2 + connectorSide - connectorSpacer, -connectorMid-connectorSide],
             [-connectorWidth/2 - connectorSide + connectorSpacer, -connectorMid-connectorSide],
             ]);
-    
+
         translate([0,0,connectorLength-5])
         linear_extrude(height=5, scale=[0.75, 1])
         polygon(points=[
@@ -278,7 +278,7 @@ module Connector()
             [connectorWidth/2 + connectorSide - connectorSpacer, -connectorMid-connectorSide],
             [-connectorWidth/2 - connectorSide + connectorSpacer, -connectorMid-connectorSide],
             ]);
-            
+
         for (z=[6,connectorLength-6])
 
         translate([0,0,z])
@@ -292,13 +292,13 @@ module Connector()
                     [connectorWidth/2 - connectorSpacer, -connectorMid],
                     [connectorWidth/2 + connectorSide -connectorSpacer/2, -connectorMid-connectorSide],
                     [-connectorWidth/2 - connectorSide +connectorSpacer/2, -connectorMid-connectorSide],
-                    ]); 
+                    ]);
 }
 
 module MountHole()
 {
-    translate([0,-0.01,0]) 
-    rotate([-90,0,0]) 
+    translate([0,-0.01,0])
+    rotate([-90,0,0])
     {
         cylinder(d=mountholeSize2, d2=mountholeSize1, h = mountholeDepth1, $fn=32);
         translate([0,0,mountholeDepth1])
@@ -307,13 +307,13 @@ module MountHole()
 }
 
 function CorrectedHeight(height) = ceil(height/layerHeight)*layerHeight;
-function CorrectedHeightDown(height) = floor(height/layerHeight)*layerHeight;    
+function CorrectedHeightDown(height) = floor(height/layerHeight)*layerHeight;
 
 module ConnectorCutout()
 {
-    
+
     len = connectorLength + 2;
-    linear_extrude(height=len) 
+    linear_extrude(height=len)
         polygon(points=[
             [-connectorWidth/2, -connectorMid],
             [-connectorWidth/2, connectorMid],
@@ -324,9 +324,9 @@ module ConnectorCutout()
             [connectorWidth/2 + connectorSide, -connectorMid-connectorSide],
             [-connectorWidth/2 - connectorSide, -connectorMid-connectorSide],
             ]);
-    
+
         scale([2,1.25,1])
-        linear_extrude(height=5, scale=[.5, 1/1.25]) 
+        linear_extrude(height=5, scale=[.5, 1/1.25])
         polygon(points=[
             [-connectorWidth/2, -connectorMid],
             [-connectorWidth/2, connectorMid],
@@ -337,7 +337,7 @@ module ConnectorCutout()
             [connectorWidth/2 + connectorSide, -connectorMid-connectorSide],
             [-connectorWidth/2 - connectorSide, -connectorMid-connectorSide],
             ]);
-    
+
 }
 //!Grooves(100,100);
 
@@ -351,7 +351,7 @@ module Grooves(width,height)
     space = (areaHeight - count*grooveHeight) / (count-1);
     startZ = -areaHeight/2 + grooveHeight/2;
     stepZ = space+grooveHeight;
-        
+
     for (z=[0:count-1]) translate([0,0,startZ + z*stepZ])
     {
         hull()
@@ -364,9 +364,9 @@ module Grooves(width,height)
                 rotate([90,0,0])
                     cylinder(d=grooveHeight-grooveDepth*2, h=grooveDepth*2, center=true, $fn=32);
         }
-        
+
     }
-}    
+}
 
 module Box(boxLeft="grooves", boxRight="grooves", boxTop="solid", boxBottom="solid")
 {
@@ -387,7 +387,7 @@ module Box(boxLeft="grooves", boxRight="grooves", boxTop="solid", boxBottom="sol
         //main body of the box
         translate([0,0,boxHeight/2]) rotate([90,0,0])
             SmoothCube2([boxWidth, boxHeight, boxDepth]);
-        
+
         //for each column
         for (x=[0:drawCols-1])
         {
@@ -396,31 +396,31 @@ module Box(boxLeft="grooves", boxRight="grooves", boxTop="solid", boxBottom="sol
                 translate([startX+x*stepX,y-1,startZ + z*stepZ])
                     SmoothCube([boxDrawSpaceX, boxDrawSpaceY+2, boxDrawSpaceZ]);
             //cut out front part
-            translate([startX+x*stepX,,-boxDepth-1,boxOutsideWidth+fontPanelHeight/2]) 
+            translate([startX+x*stepX,,-boxDepth-1,boxOutsideWidth+fontPanelHeight/2])
                 SmoothPanel([frontPanelWidth, CorrectedHeight(frontPanelInset)+1, fontPanelHeight]);
-        
+
             //cut out inside
-            translate([startX+x*stepX, -boxBackDepth-smoothRadius,boxOutsideWidth]) 
+            translate([startX+x*stepX, -boxBackDepth-smoothRadius,boxOutsideWidth])
                 YMinCube([insideCutWidth, boxDepth, insideCutHeight]);
-            
+
             //cutout mounting holes
             if (mountHoles)
             {
                 for (x2=[-1,1])
-                    translate([startX+x*stepX + x2*(boxDrawSpaceX/2-mountholeSize2*1.5), 
+                    translate([startX+x*stepX + x2*(boxDrawSpaceX/2-mountholeSize2*1.5),
                            -boxBackDepth,
                            startZ + (drawRows-0.5)*stepZ])
                         MountHole();
-                
-                translate([startX+x*stepX, 
+
+                translate([startX+x*stepX,
                            -boxBackDepth,
                            startZ + 0.5*stepZ])
                         MountHole();
             }
-                
-                
+
+
         }
-        
+
         //add stuff like connectors
         if (boxLeft=="connector")
             for (z=[-1,1]) translate([-boxWidth/2, 0.0001, boxHeight/2 + z*boxHeight*connectorDist])
@@ -428,58 +428,58 @@ module Box(boxLeft="grooves", boxRight="grooves", boxTop="solid", boxBottom="sol
         else if (boxLeft=="grooves")
             translate([-boxWidth/2, -boxDepth/2, boxHeight/2])
                 rotate([0,0,90]) Grooves(boxDepth-smoothRadius/2, boxHeight-smoothRadius/2);
-        
+
         if (boxRight=="connector")
             for (z=[-1,1]) translate([boxWidth/2, 0.0001, boxHeight/2 + z*boxHeight*connectorDist])
                 rotate([90,90,0]) ConnectorCutout();
         else if (boxRight=="grooves")
             translate([boxWidth/2, -boxDepth/2, boxHeight/2])
                 rotate([0,0,90]) Grooves(boxDepth-smoothRadius/2, boxHeight-smoothRadius/2);
-        
+
         if (boxBottom=="connector")
             for (x=[-1,1]) translate([x*boxWidth*connectorDist, 0.0001, 0])
                 rotate([90,0,0]) ConnectorCutout();
-        
+
         if (boxTop=="connector")
             for (x=[-1,1]) translate([x*boxWidth*connectorDist, 0.0001, boxHeight])
                 rotate([90,0,0]) ConnectorCutout();
-            
-        
-        
+
+
+
     }
-    
+
     //add stoppers
     for (x=[0:drawCols-1]) for (z=[0:drawRows-1]) for (x2=[-1,1])
         translate([startX+x*stepX + x2*stopperDist,
                    stopperY,
                    startZ + z*stepZ + boxDrawSpaceZ])
             Stopper();
-            
-        
-    
+
+
+
     //*for (x=[0:drawCols-1]) for (z=[0:drawRows-1])
     //    translate([startX+x*stepX,y - drawBackSpace/2 ,startZ + drawVertSpace + z*stepZ])
     //        Drawer();
-    
+
 }
 
 module CustomDrawer()
 {
     y = -drawDepth/2 + drawFrontExtra;
     z = drawHeight/2;
-    
+
 
     indentWidth = drawWidth - drawOutsideWidth*2;
     indentDepth = drawDepth - drawOutsideWidth*2;
-    
+
     ccompWidth = (indentWidth - (cdrawXCount-1)*drawDividerWidth) / cdrawXCount;
     ccompDepth = (indentDepth - (cdrawYCount-1)*drawDividerWidth) / cdrawYCount;
-    
+
     startX = -drawWidth/2 + drawOutsideWidth + ccompWidth/2;
     startY = -drawDepth/2 + drawOutsideWidth + ccompDepth/2;
     stepX = ccompWidth + drawDividerWidth;
     stepY = ccompDepth + drawDividerWidth;
-    
+
     difference()
     {
         DrawerBase();
@@ -491,32 +491,32 @@ module CustomDrawer()
         translate([0,0,drawHeight])
             SmoothCube([indentWidth, indentDepth, smoothRadius+1]);
     }
-        
+
     if (handleStyle==0)
         translate([0,y,z]) Handle();
     if (handleStyle==1)
         translate([0,y,0]) HandleThin();
     for (x=[-1,1])
         translate([x*labelFrameDist,y,smoothRadius]) LabelFrame();
-    
-    
+
+
 }
 
 module Drawer()
 {
     y = -drawDepth/2 + drawFrontExtra;
     z = drawHeight/2;
-    
+
     echo(drawHeight);
-    
+
     startX = -drawWidth/2 + drawOutsideWidth + compartWidthF/2;
     startY = -drawDepth/2 + drawOutsideWidth + compartDepthF/2;
     stepX = compartWidthF + drawDividerWidth;
     stepY = compartDepthF + drawDividerWidth;
     indentWidth = drawWidth - drawOutsideWidth*2;
     indentDepth = drawDepth - drawOutsideWidth*2;
-    
-    
+
+
     difference()
     {
         DrawerBase();
@@ -525,18 +525,18 @@ module Drawer()
             translate([startX + x*stepX, startY + y*stepY, drawBottomHeight])
                 SmoothCube([compartWidthF, compartDepthF, compartHeightF+2]);
         //top indent for dividers
-        translate([0,0,drawHeight-stopperHeight]) 
+        translate([0,0,drawHeight-stopperHeight])
             SmoothCube([indentWidth, indentDepth, smoothRadius+1]);
     }
-        
+
     if (handleStyle==0)
         translate([0,y,z]) Handle();
     if (handleStyle==1)
         translate([0,y,0]) HandleThin();
     for (x=[-1,1])
         translate([x*labelFrameDist,y,smoothRadius]) LabelFrame();
-    
-    
+
+
 }
 
 
@@ -546,30 +546,30 @@ module DrawerBase()
                 SmoothCube([drawWidth-drawShrink, drawDepth+drawFrontExtra, drawHeight-drawShrink]);
                 //the front panel
             translate([0, -drawDepth/2 -drawFrontExtra , drawHeight/2+drawFrontExtraHeight/2])
-                SmoothPanel([drawFrontWidth, smoothRadius, drawFrontHeight]);                
+                SmoothPanel([drawFrontWidth, smoothRadius, drawFrontHeight]);
 }
 
 
 
 module Handle()
 {
-    for (x=[0,1]) mirror([x,0,0]) 
+    for (x=[0,1]) mirror([x,0,0])
         translate([handleWidth/2-handleThickness,0]) rotate([90,0,90])
             linear_extrude(height=handleThickness)
             polygon(points=[[.01,-handleHeight/2-.01], [-handleDepth,0],[.01,handleHeight/2+.01]]);
-    
+
     a = atan(handleDepth / (handleHeight/2));
     a2 = 90-a;
-    
+
     d = handleThickness / sin(a);
     d2 = handleThickness / sin(a2);
-    
 
-    
+
+
     rotate([90,0,90])
         linear_extrude(height=handleWidth-0.01, center=true)
             polygon(points=[[-handleDepth,0],[.01,handleHeight/2+.01],[.01,handleHeight/2-d],
-                         [-handleDepth+layerWidth*2,0]]); 
+                         [-handleDepth+layerWidth*2,0]]);
 }
 
 //!HandleThin(5);
@@ -586,7 +586,7 @@ module HandleThin()
     difference()
     {
         cylinder(d=startDiam, h=height, $fn=32);
-        translate([0,handleWidth+.01,0]) 
+        translate([0,handleWidth+.01,0])
             cube([handleWidth*2, handleWidth*2, height*2.1], center=true);
     }
     difference()
@@ -599,18 +599,18 @@ module HandleThin()
         translate([0,-length-endDiam/2-handleWidth*.5,0]) rotate([45,0,0])
             cube([height,height,height*1.5], center=true);
     }
-   
+
     translate([0,-length,height]) sphere(d=endDiam, $fn=32);
-     
+
 }
-    
+
 
 
 module LabelFrame()
 {
 /*
     depth = labelFrameThickness + labelFrameSpace;
-    
+
     difference()
     {
         translate([0,-depth/2+.01,0])
@@ -618,20 +618,20 @@ module LabelFrame()
         translate([0,0,labelFrameEdgeSize])
             CenterCube([labelFrameWidth-2*labelFrameEdgeSize, depth*3, labelFrameHeight]);
         translate([0,0,labelFrameThickness])
-            CenterCube([labelFrameWidth-labelFrameThickness*2, labelFrameSpace*2, labelFrameHeight]);  
+            CenterCube([labelFrameWidth-labelFrameThickness*2, labelFrameSpace*2, labelFrameHeight]);
 
-        
+
     }
-    
-    for (x=[0,1]) mirror([x,0,0]) 
+
+    for (x=[0,1]) mirror([x,0,0])
     translate([0,-labelFrameSpace,0]) rotate([90,0,0]) linear_extrude(height=labelFrameThickness)
         polygon(points=[[-labelFrameWidth/2+labelFrameEdgeSize-0.01, labelFrameEdgeSize*2],
                         [-labelFrameWidth/2+labelFrameEdgeSize*2, labelFrameEdgeSize],
                         [-labelFrameWidth/2+labelFrameEdgeSize-0.01, labelFrameEdgeSize]]);
-    
+
     ratio = layerHeight/ layerWidth;
-    
-    rotate([90,0,-90]) linear_extrude(height =labelFrameWidth, center=true) 
+
+    rotate([90,0,-90]) linear_extrude(height =labelFrameWidth, center=true)
         polygon(points=[[0,0],[depth,0], [0,-depth*ratio*1.5]]);
 */
 }
@@ -647,12 +647,12 @@ module Stopper()
                                 [-stopperWidth/2*(i/stopperSteps),-stopperHeight*(i/stopperSteps)],
                                 [stopperWidth/2*(i/stopperSteps),-stopperHeight*(i/stopperSteps)],
                                 [stopperWidth*(i/stopperSteps),0]]);
-    
-}  
+
+}
 
 module CenterCube(size)
 {
-    translate([0,0,size[2]/2]) 
+    translate([0,0,size[2]/2])
         cube(size=size,center=true);
 }
 
@@ -666,14 +666,14 @@ module SmoothCube(size)
     sr2 = smoothRadius*2;
     hull()
     {
-        
+
         translate([0,0,size[2]/2])
         {
             cube([size[0], size[1]-sr2, size[2]-sr2], center=true);
             cube([size[0]-sr2, size[1], size[2]-sr2], center=true);
             cube([size[0]-sr2, size[1]-sr2, size[2]], center=true);
         }
-        
+
         for (x=[-1,1]) for (y=[-1,1])
         {
             translate([x*(size[0]/2-smoothRadius), y*(size[1]/2-smoothRadius), smoothRadius])
@@ -684,7 +684,7 @@ module SmoothCube(size)
             translate([x*(size[0]/2-smoothRadius), y*(size[1]/2-smoothRadius), size[2]-0.01])
                 cylinder(r=smoothRadius, h=0.01, $fn=smoothQuality);
         }
-        
+
     }
 }
 
@@ -699,7 +699,7 @@ module SmoothCube2(size)
             translate([x*(size[0]/2-smoothRadius), y*(size[1]/2-smoothRadius), 0])
                 cylinder(r=smoothRadius, h=size[2], $fn=smoothQuality);
         }
-        
+
     }
 }
 
@@ -710,7 +710,7 @@ module SmoothPanel(size)
     {
         for (x=[-1,1]) for (z=[-1,1])
             translate([x*(size[0]/2-smoothRadius),0,  z*(size[2]/2-smoothRadius)])
-                rotate([-90,0,0]) 
+                rotate([-90,0,0])
                     cylinder(r=smoothRadius, h=size[1], $fn=smoothQuality);
     }
 }
