@@ -1,20 +1,26 @@
 //STACKABLE RESISTOR STORAGE BOX [Customizable]
 //Created by Bram Vaessen 2018
 
-
 // preview[view:south, tilt:top diagonal]
 
 // Which one would you like to see?
 part = "single"; //[single:Single Box <no stacking>), drawer: Drawer, customDrawer: Custom Drawer, topLeft:Box Top Left, topMiddle:Box Top Middle, topRight:Box Top Right, middleLeft:Box Middle Left, middleMiddle:Box Middle Middle, middleRight:Box Middle right, bottomLeft:Box Bottom Left, bottomMiddle:Box Bottom Middle, bottomRight:Box Bottom Right,  topSC:Box Top <Single Column Stacking>, middleSC:Box Middle <Signle Column Stacking>, bottomSC:Box Bottom <Signle Column Stacking>, leftSR:Box Left <Single Row Stacking>, middleSR:Box Middle <Single Row Stacking>, rightSR:Box Right <Single Row Stacking>, connector:Connector <for stacking>, info:INFO <Show Box/Drawer/Label sizes>]
 
+/* [Core Box Size] */
+//the width (mm) of a standard 1x1x1 box
+coreBoxWidth = 73.06;
+//the depth (mm) of a standard 1x1x1 box
+coreBoxDepth = 67.2;
+//the height (mm) of a standard 1x1x1 box
+coreBoxHeight = 74.64;
 
 /* [Basic Setup] */
-//The width (mm) of a single compartment in a drawer (ignored with 'Custom Sized Box')
-compartWidth = 20;
-//The depth (mm) of a single compartment in a drawer (ignored with 'Custom Sized Box')
-compartDepth = 62;
-//The height (mm) of a single compartment in a drawer (ignored with 'Custom Sized Box')
-compartHeight = 15;
+// The number of box-units wide to use
+boxWidthCount = 1;
+// The number of box-units deep to use
+boxDepthCount = 1;
+// The number of box-units high to use
+boxHeightCount = 1;
 
 //The number of compartments in the drawer next to each other
 compartXCount = 3;
@@ -22,9 +28,9 @@ compartXCount = 3;
 compartYCount = 1;
 
 //The number of drawers on top of each other
-drawRows = 4;
+drawerRows = 4;
 //The number of columns of drawers next to eachother
-drawCols = 1;
+drawerCols = 1;
 
 //The style of the handle on the drawers
 handleStyle = 0; //[0:Normal, 1:Thin Handle]
@@ -32,22 +38,11 @@ handleStyle = 0; //[0:Normal, 1:Thin Handle]
 //Add holes to the back of the box for mounting it on a wall or panel?
 mountHoles=0; //[0:No, 1:Yes]
 
-
 /* [Custom Drawer] */
 //The number of compartments in the drawer next to each other (custom drawer)
 cdrawXCount=1;
 //The number of compartments in the drawer behind each other (custom drawer)
 cdrawYCount=1;
-
-/* [Custom Sized Box] */
-//Provide a custom size for the box? Overrides/ignores compartment size!
-useCustomBox = 0; //[0:No, 1:Yes]
-//the width (mm) of the box
-customBoxWidth = 73.06;
-//the depth (mm) of the box
-customBoxDepth = 67.2;
-//the height (mm) of the box
-customBoxHeight = 74.64;
 
 /* [Tolerances] */
 //the amount of extra space (mm) on the side of the drawers, on each side (reprint box after changing, unless using 'custom sized box', then reprint drawer)
@@ -62,7 +57,7 @@ drawShrink = 0.2;
 
 /* [Your Printer Settings] */
 //the layer width that you print with (0.48 is normal for 0.4 nozzle)
-layerWidth=0.48;
+layerWidth=0.4;
 //the layer height that you print with
 layerHeight=0.2;
 
@@ -91,26 +86,24 @@ boxOutsideWidth = 5*layerWidth;
 boxDividerWidth = 2*layerWidth;
 boxBackDepth = (mountHoles==1)?CorrectedHeight(3):CorrectedHeight(1);
 
+customBoxWidth = coreBoxWidth*boxWidthCount;
+customBoxDepth = coreBoxDepth*boxDepthCount;
+customBoxHeight = coreBoxHeight*boxHeightCount;
 
 //if custom box size, reverse calculations
-customBoxColumnWidth = (customBoxWidth +boxOutsideWidth*(drawCols-1) -  boxOutsideWidth + boxDividerWidth)/drawCols;
+customBoxColumnWidth = (customBoxWidth +boxOutsideWidth*(drawerCols-1) -  boxOutsideWidth + boxDividerWidth)/drawerCols;
 customBoxDrawSpaceX = customBoxColumnWidth - drawFrontExtraWidth*2 - boxOutsideWidth - boxColumnSpace;
 
 customBoxDrawSpaceY = customBoxDepth - boxBackDepth - drawFrontExtra;
-customBoxDrawSpaceZ = (customBoxHeight - boxOutsideWidth*2)/drawRows - boxDividerWidth;
+customBoxDrawSpaceZ = (customBoxHeight - boxOutsideWidth*2)/drawerRows - boxDividerWidth;
 
 customDrawWidth = customBoxDrawSpaceX - drawHorSpace*2;
 customDrawDepth = customBoxDrawSpaceY - drawBackSpace;
 customDrawHeight = customBoxDrawSpaceZ - drawVertSpace*2;
 
-customCompartWidth = (customDrawWidth - drawOutsideWidth*2 - drawDividerWidth*(compartXCount-1)) / compartXCount;
-customCompartDepth = (customDrawDepth - drawOutsideWidth*2 -drawDividerWidth*(compartYCount-1))/compartYCount;
-customCompartHeight = customDrawHeight-drawBottomHeight;
-
-compartWidthF = useCustomBox ? customCompartWidth : compartWidth;
-compartDepthF = useCustomBox ? customCompartDepth : compartDepth;
-compartHeightF = useCustomBox ? customCompartHeight : compartHeight;
-
+compartWidthF = (customDrawWidth - drawOutsideWidth*2 - drawDividerWidth*(compartXCount-1)) / compartXCount;
+compartDepthF = (customDrawDepth - drawOutsideWidth*2 -drawDividerWidth*(compartYCount-1))/compartYCount;
+compartHeightF = customDrawHeight-drawBottomHeight;
 
 drawWidth = drawOutsideWidth*2 + drawDividerWidth*(compartXCount-1) + compartWidthF*compartXCount;
 drawDepth = drawOutsideWidth*2 + drawDividerWidth*(compartYCount-1) + compartDepthF*compartYCount;
@@ -130,9 +123,9 @@ boxDrawSpaceZ = drawHeight + drawVertSpaceC*2;
 
 boxColumnWidth = boxDrawSpaceX + drawFrontExtraWidth*2 + boxOutsideWidth + boxColumnSpace;
 
-boxWidth = boxColumnWidth * drawCols - boxOutsideWidth*(drawCols-1) + boxOutsideWidth - boxDividerWidth;
+boxWidth = boxColumnWidth * drawerCols - boxOutsideWidth*(drawerCols-1) + boxOutsideWidth - boxDividerWidth;
 boxDepth = CorrectedHeight(boxBackDepth + boxDrawSpaceY + drawFrontExtra);
-boxHeight = drawRows*(boxDrawSpaceZ + boxDividerWidth)+ boxOutsideWidth*2;
+boxHeight = drawerRows*(boxDrawSpaceZ + boxDividerWidth)+ boxOutsideWidth*2;
 
 
 
@@ -376,12 +369,12 @@ module Box(boxLeft="grooves", boxRight="grooves", boxTop="solid", boxBottom="sol
     stepZ = boxDrawSpaceZ + boxDividerWidth;
     y= -boxBackDepth - boxDrawSpaceY/2;
     frontPanelWidth = boxDrawSpaceX+drawFrontExtraWidth*2;
-    fontPanelHeight = drawRows*(boxDrawSpaceZ+boxDividerWidth);
+    fontPanelHeight = drawerRows*(boxDrawSpaceZ+boxDividerWidth);
     stopperY = CorrectedHeight(-boxDepth + smoothRadius + stopperStart);
     frontPanelInset = smoothRadius + drawFrontExtra + labelFrameDepth;
     stopperDist = drawWidth /2 -drawOutsideWidth - stopperWidth;
     insideCutWidth = (stopperDist -stopperWidth) * 2;
-    insideCutHeight = stepZ * drawRows - smoothRadius*2;
+    insideCutHeight = stepZ * drawerRows - smoothRadius*2;
     difference()
     {
         //main body of the box
@@ -389,10 +382,10 @@ module Box(boxLeft="grooves", boxRight="grooves", boxTop="solid", boxBottom="sol
             SmoothCube2([boxWidth, boxHeight, boxDepth]);
 
         //for each column
-        for (x=[0:drawCols-1])
+        for (x=[0:drawerCols-1])
         {
             //cut out the drawer parts
-            for (z=[0:drawRows-1])
+            for (z=[0:drawerRows-1])
                 translate([startX+x*stepX,y-1,startZ + z*stepZ])
                     SmoothCube([boxDrawSpaceX, boxDrawSpaceY+2, boxDrawSpaceZ]);
             //cut out front part
@@ -409,7 +402,7 @@ module Box(boxLeft="grooves", boxRight="grooves", boxTop="solid", boxBottom="sol
                 for (x2=[-1,1])
                     translate([startX+x*stepX + x2*(boxDrawSpaceX/2-mountholeSize2*1.5),
                            -boxBackDepth,
-                           startZ + (drawRows-0.5)*stepZ])
+                           startZ + (drawerRows-0.5)*stepZ])
                         MountHole();
 
                 translate([startX+x*stepX,
@@ -449,7 +442,7 @@ module Box(boxLeft="grooves", boxRight="grooves", boxTop="solid", boxBottom="sol
     }
 
     //add stoppers
-    for (x=[0:drawCols-1]) for (z=[0:drawRows-1]) for (x2=[-1,1])
+    for (x=[0:drawerCols-1]) for (z=[0:drawerRows-1]) for (x2=[-1,1])
         translate([startX+x*stepX + x2*stopperDist,
                    stopperY,
                    startZ + z*stepZ + boxDrawSpaceZ])
@@ -457,7 +450,7 @@ module Box(boxLeft="grooves", boxRight="grooves", boxTop="solid", boxBottom="sol
 
 
 
-    //*for (x=[0:drawCols-1]) for (z=[0:drawRows-1])
+    //*for (x=[0:drawerCols-1]) for (z=[0:drawerRows-1])
     //    translate([startX+x*stepX,y - drawBackSpace/2 ,startZ + drawVertSpace + z*stepZ])
     //        Drawer();
 
@@ -488,7 +481,7 @@ module CustomDrawer()
             translate([startX + x*stepX, startY + y*stepY, drawBottomHeight])
                 SmoothCube([ccompWidth, ccompDepth, compartHeightF+1]);
         //top indent for dividers
-        translate([0,0,drawHeight])
+        translate([0,0,drawHeight-stopperHeight])
             SmoothCube([indentWidth, indentDepth, smoothRadius+1]);
     }
 
@@ -608,7 +601,6 @@ module HandleThin()
 
 module LabelFrame()
 {
-/*
     depth = labelFrameThickness + labelFrameSpace;
 
     difference()
@@ -633,7 +625,6 @@ module LabelFrame()
 
     rotate([90,0,-90]) linear_extrude(height =labelFrameWidth, center=true)
         polygon(points=[[0,0],[depth,0], [0,-depth*ratio*1.5]]);
-*/
 }
 
 
